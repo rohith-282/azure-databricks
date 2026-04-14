@@ -180,3 +180,15 @@ Sample files in `data_samples/` let you test the pipeline locally without connec
 | Uptime | 99.9% (production) |
 
 ---
+
+## Author
+
+**Rohith R** — Azure Data Engineer at LTIMindtree  
+[LinkedIn](https://www.linkedin.com/in/r-rohith-r) | [Email](mailto:rohithtowork@gmail.com)
+
+---
+
+## Certifications
+
+- Microsoft AZ-900: Azure Data Fundamentals
+- SQL for Data Science & Data Engineering — Udemy

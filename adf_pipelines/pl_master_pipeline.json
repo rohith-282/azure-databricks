@@ -1,0 +1,83 @@
+{
+  "name": "pl_master_pipeline",
+  "properties": {
+    "description": "Master orchestration pipeline — runs ingestion, transformation, and aggregation in sequence.",
+    "activities": [
+      {
+        "name": "Ingest CSV Orders",
+        "type": "DatabricksNotebook",
+        "dependsOn": [],
+        "typeProperties": {
+          "notebookPath": "/Shared/azure-data-pipeline/01_bronze_ingestion",
+          "baseParameters": {
+            "entity": "orders",
+            "source_format": "csv"
+          }
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_databricks",
+          "type": "LinkedServiceReference"
+        }
+      },
+      {
+        "name": "Ingest JSON Events",
+        "type": "DatabricksNotebook",
+        "dependsOn": [],
+        "typeProperties": {
+          "notebookPath": "/Shared/azure-data-pipeline/01_bronze_ingestion",
+          "baseParameters": {
+            "entity": "events",
+            "source_format": "json"
+          }
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_databricks",
+          "type": "LinkedServiceReference"
+        }
+      },
+      {
+        "name": "Silver Transformation",
+        "type": "DatabricksNotebook",
+        "dependsOn": [
+          { "activity": "Ingest CSV Orders",  "dependencyConditions": ["Succeeded"] },
+          { "activity": "Ingest JSON Events", "dependencyConditions": ["Succeeded"] }
+        ],
+        "typeProperties": {
+          "notebookPath": "/Shared/azure-data-pipeline/02_silver_transformation"
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_databricks",
+          "type": "LinkedServiceReference"
+        }
+      },
+      {
+        "name": "Gold Aggregation",
+        "type": "DatabricksNotebook",
+        "dependsOn": [
+          { "activity": "Silver Transformation", "dependencyConditions": ["Succeeded"] }
+        ],
+        "typeProperties": {
+          "notebookPath": "/Shared/azure-data-pipeline/03_gold_aggregation"
+        },
+        "linkedServiceName": {
+          "referenceName": "ls_databricks",
+          "type": "LinkedServiceReference"
+        }
+      }
+    ],
+    "triggers": [
+      {
+        "name": "daily_trigger",
+        "type": "ScheduleTrigger",
+        "typeProperties": {
+          "recurrence": {
+            "frequency": "Day",
+            "interval": 1,
+            "startTime": "2025-01-01T01:00:00Z",
+            "timeZone": "UTC"
+          }
+        }
+      }
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "_comment": "Copy this file to config.json and fill in your Azure resource details. Never commit config.json to Git.",
+  "storage_account":  "your_storage_account_name",
+  "raw_container":    "raw",
+  "bronze_container": "bronze",
+  "silver_container": "silver",
+  "gold_container":   "gold",
+  "sql_server":       "your_sql_server_name",
+  "sql_database":     "your_database_name",
+  "sql_user":         "your_sql_username",
+  "sql_password":     "your_sql_password"
+}
